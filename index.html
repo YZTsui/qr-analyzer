@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <meta name="theme-color" content="#f5f7f8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <title>二维码分析器</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">本地处理 · 不上传图片</p>
+        <h1>二维码分析器</h1>
+        <p class="subtitle">上传二维码截图，自动识别原文、字段和时间信息，并比较多张二维码的变化。</p>
+      </div>
+      <div class="clock-card" aria-live="polite">
+        <span>当前时间</span>
+        <strong id="liveClock">--:--:--</strong>
+      </div>
+    </header>
+
+    <section class="card upload-card">
+      <label class="upload-button" for="imageInput">
+        <span class="upload-icon">＋</span>
+        <span>从相册选择二维码截图</span>
+      </label>
+      <input id="imageInput" type="file" accept="image/*" multiple hidden>
+      <p class="hint">可一次选择多张。图片只在当前浏览器中分析，不会上传到服务器。</p>
+      <div id="dependencyWarning" class="notice warning hidden"></div>
+    </section>
+
+    <section id="statusArea" class="status-stack" aria-live="polite"></section>
+
+    <section id="samplesSection" class="hidden">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">识别结果</p>
+          <h2>二维码样本</h2>
+        </div>
+        <button id="clearButton" class="button secondary" type="button">清空</button>
+      </div>
+      <div id="sampleList" class="sample-list"></div>
+    </section>
+
+    <section id="comparisonSection" class="card hidden">
+      <div class="section-heading compact">
+        <div>
+          <p class="eyebrow">多码比较</p>
+          <h2>字段变化</h2>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="comparisonTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="regenSection" class="card hidden">
+      <div class="section-heading compact">
+        <div>
+          <p class="eyebrow">原样重建</p>
+          <h2>重新绘制二维码</h2>
+        </div>
+      </div>
+      <p class="hint">只按识别到的原始内容重新绘制，不会修改其中任何字段。</p>
+      <label class="field-label" for="sampleSelect">选择样本</label>
+      <select id="sampleSelect" class="select"></select>
+      <div id="qrOutput" class="qr-output"></div>
+      <div class="action-row">
+        <button id="copyButton" class="button secondary" type="button">复制原始内容</button>
+        <button id="fullscreenButton" class="button primary" type="button">全屏显示</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>若微信内置浏览器无法读取相册或二维码库加载失败，请点击右上角菜单并选择“在 Safari 中打开”。</p>
+    </footer>
+  </main>
+
+  <div id="fullscreenOverlay" class="fullscreen-overlay hidden" role="dialog" aria-modal="true" aria-label="全屏二维码">
+    <button id="closeFullscreen" class="close-button" type="button" aria-label="关闭">×</button>
+    <div id="fullscreenQr" class="fullscreen-qr"></div>
+    <p>按原始内容重新绘制</p>
+  </div>
+
+  <canvas id="workCanvas" hidden></canvas>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
